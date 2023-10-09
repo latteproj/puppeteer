@@ -1,10 +1,16 @@
 FROM ubuntu:22.04
 
 ENV TZ=Asia/Shanghai
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+ENV NODE_MAJOR=20
+
 RUN set -ex \
     && apt-get update -yq \
-    && DEBIAN_FRONTEND=noninteractive apt-get -yq install nodejs rsync curl wget gnupg \
+    && apt-get install -yq ca-certificates gnupg rsync curl wget \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg \
+    && sh -c 'echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" >> /etc/apt/sources.list.d/nodesource.list' \
+    && apt-get update -yq \
+    && DEBIAN_FRONTEND=noninteractive apt-get install nodejs -yq \
+    && rm -rf /var/lib/apt/lists/* \
     && npm install -g yarn tyarn \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
     && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
