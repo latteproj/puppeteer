@@ -4,7 +4,7 @@ ENV TZ=Asia/Shanghai
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 RUN set -ex \
     && apt-get update -yq \
-    && DEBIAN_FRONTEND=noninteractive apt-get -yq install nodejs netselect-apt rsync curl wget gnupg \
+    && DEBIAN_FRONTEND=noninteractive apt-get -yq install nodejs rsync curl wget gnupg \
     && npm install -g yarn tyarn \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
     && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
